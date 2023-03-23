@@ -16,13 +16,14 @@ export class CoffeesService {
 
   create(coffee: Coffee): void {
     const exists = this.coffees.find((c) => c.id === coffee.id);
-    if (!exists) {
+    if (exists) {
+      throw new HttpException(
+        `Coffee #${coffee.id} already exists`,
+        HttpStatus.CONFLICT,
+      );
+    } else {
       this.coffees.push(coffee);
     }
-    throw new HttpException(
-      `Coffee #${coffee.id} already exists`,
-      HttpStatus.CONFLICT,
-    );
   }
 
   readById(id: number) {
