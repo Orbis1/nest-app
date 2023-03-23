@@ -4,31 +4,28 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from './entities/coffee.entity';
+import { Repository } from 'typeorm';
+import { CreateCoffeeDto } from './dto/create-coffee.dto';
 
 @Injectable()
 export class CoffeesService {
-  private coffees: Coffee[] = [
-    { id: 1, name: 'Espresso', brand: 'Java', flavors: ['lava'] },
-  ];
+  constructor(
+    @InjectRepository(Coffee)
+    private readonly coffeeRepository: Repository<Coffee>,
+  ) {}
 
   //crud
 
-  create(coffee: Coffee): void {
-    const exists = this.coffees.find((c) => c.id === coffee.id);
-    if (exists) {
-      throw new HttpException(
-        `Coffee #${coffee.id} already exists`,
-        HttpStatus.CONFLICT,
-      );
-    } else {
-      this.coffees.push(coffee);
-    }
+  create(createCoffeeDto: CreateCoffeeDto) {
+    const coffee = this.coffeeRepository.create(createCoffeeDto);
+    return this.coffeeRepository.save(coffee);
   }
 
-  readById(id: number) {
-    const coffee = this.coffees.find((c) => c.id === id);
+  async readById(id: number) {
+    const coffee = await this.coffeeRepository.findOneBy({ id: id });
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
     }
@@ -36,17 +33,20 @@ export class CoffeesService {
   }
 
   readAll() {
-    return this.coffees;
+    return this.coffeeRepository.find();
   }
 
-  update(id: number, newProps: UpdateCoffeeDto): void {
-    // TODO: what if newProps are equl to oldProps?
-    const newCoffee = { ...this.readById(id), ...newProps };
-    this.delete(id);
-    this.create(newCoffee);
+  async update(id: number, newProps: UpdateCoffeeDto) {
+    // TODO: what if newProps are equal to oldProps?
+    const coffee = await this.coffeeRepository.preload({ id, ...newProps });
+    if (!coffee) {
+      throw new NotFoundException(`Coffee #${id} not found`);
+    }
+    return this.coffeeRepository.save(coffee);
   }
 
-  delete(id: number) {
-    this.coffees = this.coffees.filter((c) => c.id !== id);
+  async delete(id: number) {
+    const coffee = await this.readById(id);
+    return this.coffeeRepository.remove(coffee);
   }
 }
