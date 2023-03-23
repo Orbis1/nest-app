@@ -20,35 +20,30 @@ export class CoffeesController {
   findAll(@Query() paginationQuery) {
     // findAll(@Res() response) {
     // response.status(200).send('This action returns all coffees');
-    const { limit, offset } = paginationQuery;
-    return (
-      'This action returns all coffees' +
-      ` (limit: ${limit}, offset: ${offset})`
-    );
+    // const { limit, offset } = paginationQuery;
+    return this.coffeeService.readAll();
   }
 
   @Get(':id')
   // findOne(@Param() params) {
   // const {id} = params;
   findOne(@Param('id') id: string) {
-    return `This action returns #${id} coffee`;
+    return this.coffeeService.readById(+id);
   }
 
   @Post()
   @HttpCode(HttpStatus.GONE)
   create(@Body() body) {
-    return body;
+    this.coffeeService.create(body);
   }
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() body) {
-    console.log(body);
-
-    return `This action updates #${id} coffee`;
+    this.coffeeService.update(+id, body);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return `This action removes #${id} coffee`;
+    this.coffeeService.delete(+id);
   }
 }
