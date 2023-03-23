@@ -1,4 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Coffee } from './entities/coffee.entity';
 
 @Injectable()
@@ -10,11 +15,22 @@ export class CoffeesService {
   //crud
 
   create(coffee: Coffee): void {
-    this.coffees.push(coffee);
+    const exists = this.coffees.find((c) => c.id === coffee.id);
+    if (!exists) {
+      this.coffees.push(coffee);
+    }
+    throw new HttpException(
+      `Coffee #${coffee.id} already exists`,
+      HttpStatus.CONFLICT,
+    );
   }
 
   readById(id: number) {
-    return this.coffees.find((c) => c.id === id);
+    const coffee = this.coffees.find((c) => c.id === id);
+    if (!coffee) {
+      throw new NotFoundException(`Coffee #${id} not found`);
+    }
+    return coffee;
   }
 
   readAll() {

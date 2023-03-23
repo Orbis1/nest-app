@@ -32,7 +32,6 @@ export class CoffeesController {
   }
 
   @Post()
-  @HttpCode(HttpStatus.GONE)
   create(@Body() body) {
     this.coffeeService.create(body);
   }
