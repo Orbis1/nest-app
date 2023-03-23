@@ -1,6 +1,5 @@
 export class UpdateCoffeeDto {
-  readonly id: number;
-  readonly name: string;
-  readonly brand: string;
-  readonly flavors: string[];
+  readonly name?: string;
+  readonly brand?: string;
+  readonly flavors?: string[];
 }

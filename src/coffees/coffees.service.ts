@@ -4,6 +4,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from './entities/coffee.entity';
 
 @Injectable()
@@ -38,7 +39,8 @@ export class CoffeesService {
     return this.coffees;
   }
 
-  update(id: number, newProps: Partial<Omit<Coffee, 'id'>>): void {
+  update(id: number, newProps: UpdateCoffeeDto): void {
+    // what if newProps are equl to oldProps?
     const newCoffee = { ...this.readById(id), ...newProps };
     this.delete(id);
     this.create(newCoffee);
