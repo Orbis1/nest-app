@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpException,
+  HttpStatus,
   Param,
   Patch,
   Post,
@@ -27,8 +29,8 @@ export class CoffeesController {
   @Get(':id')
   // findOne(@Param() params) {
   // const {id} = params;
-  findOne(@Param('id') id: string) {
-    return this.coffeeService.readById(+id);
+  findOne(@Param('id') id: number) {
+    return this.coffeeService.readById(id);
   }
 
   @Post()
@@ -37,12 +39,20 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCoffeeDto: UpdateCoffeeDto) {
-    this.coffeeService.update(+id, updateCoffeeDto);
+  update(@Param('id') id: number, @Body() updateCoffeeDto: UpdateCoffeeDto) {
+    this.coffeeService.update(id, updateCoffeeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    this.coffeeService.delete(+id);
+  remove(@Param('id') id: number) {
+    // TODO @Param validation in all routes. id must be number
+    if (Number.isNaN(id)) {
+      throw new HttpException(
+        `Wrong param's type. id must be number`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    this.coffeeService.delete(id);
   }
 }

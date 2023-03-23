@@ -40,7 +40,7 @@ export class CoffeesService {
   }
 
   update(id: number, newProps: UpdateCoffeeDto): void {
-    // what if newProps are equl to oldProps?
+    // TODO: what if newProps are equl to oldProps?
     const newCoffee = { ...this.readById(id), ...newProps };
     this.delete(id);
     this.create(newCoffee);
