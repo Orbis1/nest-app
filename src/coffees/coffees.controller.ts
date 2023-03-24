@@ -11,6 +11,7 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
+import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -20,26 +21,9 @@ export class CoffeesController {
   constructor(private readonly coffeeService: CoffeesService) {}
 
   @Get()
-  findAll(@Query() paginationQuery) {
-    // findAll(@Res() response) {
-    const { limit, offset }: { limit: number; offset: number } =
-      paginationQuery;
-
-    if (Number.isNaN(limit)) {
-      throw new HttpException(
-        `Wrong param's type. ;imit must be number`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    if (Number.isNaN(offset)) {
-      throw new HttpException(
-        `Wrong param's type. offset must be number`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
-    return this.coffeeService.readAll(limit, offset);
+  findAll(@Query() paginationQuery: PaginationQueryDto) {
+    // findAll(@Res() response)
+    return this.coffeeService.readAll(paginationQuery);
   }
 
   @Get(':id')
