@@ -22,9 +22,24 @@ export class CoffeesController {
   @Get()
   findAll(@Query() paginationQuery) {
     // findAll(@Res() response) {
-    // response.status(200).send('This action returns all coffees');
-    // const { limit, offset } = paginationQuery;
-    return this.coffeeService.readAll();
+    const { limit, offset }: { limit: number; offset: number } =
+      paginationQuery;
+
+    if (Number.isNaN(limit)) {
+      throw new HttpException(
+        `Wrong param's type. ;imit must be number`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (Number.isNaN(offset)) {
+      throw new HttpException(
+        `Wrong param's type. offset must be number`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    return this.coffeeService.readAll(limit, offset);
   }
 
   @Get(':id')

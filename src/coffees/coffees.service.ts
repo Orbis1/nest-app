@@ -45,8 +45,12 @@ export class CoffeesService {
     return coffee;
   }
 
-  readAll() {
-    return this.coffeeRepository.find({ relations: { flavors: true } });
+  readAll(limit: number, offset: number) {
+    const condition = limit && offset ? { skip: offset, take: limit } : {};
+    return this.coffeeRepository.find({
+      relations: { flavors: true },
+      ...condition,
+    });
   }
 
   async update(id: number, newProps: UpdateCoffeeDto) {
