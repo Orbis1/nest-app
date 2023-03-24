@@ -8,6 +8,7 @@ import {
   Param,
   Patch,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { CoffeesService } from './coffees.service';
@@ -35,12 +36,12 @@ export class CoffeesController {
 
   @Post()
   create(@Body() createBodyDto: CreateCoffeeDto) {
-    this.coffeeService.create(createBodyDto);
+    return this.coffeeService.create(createBodyDto);
   }
 
   @Patch(':id')
   update(@Param('id') id: number, @Body() updateCoffeeDto: UpdateCoffeeDto) {
-    this.coffeeService.update(id, updateCoffeeDto);
+    return this.coffeeService.update(id, updateCoffeeDto);
   }
 
   @Delete(':id')
@@ -53,6 +54,6 @@ export class CoffeesController {
       );
     }
 
-    this.coffeeService.delete(id);
+    return this.coffeeService.delete(id);
   }
 }

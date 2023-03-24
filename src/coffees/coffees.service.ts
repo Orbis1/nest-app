@@ -37,7 +37,6 @@ export class CoffeesService {
   }
 
   async update(id: number, newProps: UpdateCoffeeDto) {
-    // TODO: what if newProps are equal to oldProps?
     const coffee = await this.coffeeRepository.preload({ id, ...newProps });
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
