@@ -16,12 +16,21 @@ export class CoffeesService {
   constructor(
     @InjectRepository(Coffee)
     private readonly coffeeRepository: Repository<Coffee>,
+
+    @InjectRepository(Flavor)
+    private readonly flavorRepository: Repository<Flavor>,
   ) {}
 
   //crud
 
-  create(createCoffeeDto: CreateCoffeeDto) {
-    const coffee = this.coffeeRepository.create(createCoffeeDto);
+  async create(createCoffeeDto: CreateCoffeeDto) {
+    const flavors = await Promise.all(
+      createCoffeeDto.flavors.map((name) => this.preloadFlavorByName(name)),
+    );
+    const coffee = this.coffeeRepository.create({
+      ...createCoffeeDto,
+      flavors,
+    });
     return this.coffeeRepository.save(coffee);
   }
 
@@ -41,7 +50,19 @@ export class CoffeesService {
   }
 
   async update(id: number, newProps: UpdateCoffeeDto) {
-    const coffee = await this.coffeeRepository.preload({ id, ...newProps });
+    const flavors =
+      newProps.flavors &&
+      (await Promise.all(
+        newProps.flavors.map((name) => this.preloadFlavorByName(name)),
+      ));
+
+    console.log(flavors, newProps.flavors, newProps.flavors && true);
+
+    const coffee = await this.coffeeRepository.preload({
+      id,
+      ...newProps,
+      flavors,
+    });
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
     }
@@ -51,5 +72,17 @@ export class CoffeesService {
   async delete(id: number) {
     const coffee = await this.readById(id);
     return this.coffeeRepository.remove(coffee);
+  }
+
+  private async preloadFlavorByName(name: string): Promise<Flavor> {
+    const existingFlavor = await this.flavorRepository.findOne({
+      where: { name: name },
+    });
+
+    if (existingFlavor) {
+      return existingFlavor;
+    }
+
+    return this.flavorRepository.create({ name });
   }
 }
