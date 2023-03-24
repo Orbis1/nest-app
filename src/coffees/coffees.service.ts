@@ -9,6 +9,7 @@ import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from './entities/coffee.entity';
 import { Repository } from 'typeorm';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
+import { Flavor } from './entities/flavor.entity';
 
 @Injectable()
 export class CoffeesService {
@@ -25,7 +26,10 @@ export class CoffeesService {
   }
 
   async readById(id: number) {
-    const coffee = await this.coffeeRepository.findOneBy({ id: id });
+    const coffee = await this.coffeeRepository.findOne({
+      where: { id: id },
+      relations: { flavors: true },
+    });
     if (!coffee) {
       throw new NotFoundException(`Coffee #${id} not found`);
     }
@@ -33,7 +37,7 @@ export class CoffeesService {
   }
 
   readAll() {
-    return this.coffeeRepository.find();
+    return this.coffeeRepository.find({ relations: { flavors: true } });
   }
 
   async update(id: number, newProps: UpdateCoffeeDto) {
