@@ -12,6 +12,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { ParamDto } from 'src/common/dto/param.dto';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -27,9 +28,8 @@ export class CoffeesController {
   }
 
   @Get(':id')
-  // findOne(@Param() params) {
-  // const {id} = params;
-  findOne(@Param('id') id: number) {
+  findOne(@Param() params: ParamDto) {
+    const { id } = params;
     return this.coffeeService.readById(id);
   }
 
@@ -39,20 +39,14 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: number, @Body() updateCoffeeDto: UpdateCoffeeDto) {
+  update(@Param() params: ParamDto, @Body() updateCoffeeDto: UpdateCoffeeDto) {
+    const { id } = params;
     return this.coffeeService.update(id, updateCoffeeDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: number) {
-    // TODO @Param validation in all routes. id must be number
-    if (Number.isNaN(id)) {
-      throw new HttpException(
-        `Wrong param's type. id must be number`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
+  remove(@Param() params: ParamDto) {
+    const { id } = params;
     return this.coffeeService.delete(id);
   }
 }
