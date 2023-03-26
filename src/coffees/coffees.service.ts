@@ -46,7 +46,6 @@ export class CoffeesService {
 
   readAll(paginationQuery: PaginationQueryDto) {
     const { limit, offset } = paginationQuery;
-    console.log({ limit, offset });
 
     return this.coffeeRepository.find({
       relations: { flavors: true },
@@ -61,8 +60,6 @@ export class CoffeesService {
       (await Promise.all(
         newProps.flavors.map((name) => this.preloadFlavorByName(name)),
       ));
-
-    console.log(flavors, newProps.flavors, newProps.flavors && true);
 
     const coffee = await this.coffeeRepository.preload({
       id,
