@@ -3,13 +3,12 @@ import {
   Controller,
   Delete,
   Get,
-  HttpException,
-  HttpStatus,
   Param,
   Patch,
   Post,
-  Put,
   Query,
+  UsePipes,
+  ValidationPipe,
 } from '@nestjs/common';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { ParamDto } from 'src/common/dto/param.dto';
@@ -17,10 +16,21 @@ import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 
+const valid = new ValidationPipe({
+  whitelist: true,
+  forbidNonWhitelisted: true,
+  transform: true,
+  transformOptions: {
+    enableImplicitConversion: true,
+  },
+});
+
+@UsePipes(valid)
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeeService: CoffeesService) {}
 
+  // @UsePipes(ValidationPipe)
   @Get()
   findAll(@Query() paginationQuery: PaginationQueryDto) {
     // findAll(@Res() response)
@@ -28,8 +38,10 @@ export class CoffeesController {
   }
 
   @Get(':id')
-  findOne(@Param() params: ParamDto) {
-    const { id } = params;
+  findOne(@Param('id') id: number) {
+    // const { id } = params;
+    console.log({ value: id, type: typeof id });
+
     return this.coffeeService.readById(id);
   }
 
