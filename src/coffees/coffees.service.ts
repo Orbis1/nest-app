@@ -22,7 +22,7 @@ export class CoffeesService {
 
     private readonly configService: ConfigService,
   ) {
-    console.log(this.configService.get('DATABASE_HOST'));
+    console.log(this.configService.get('database.host'));
   }
 
   //#region crud
