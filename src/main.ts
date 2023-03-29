@@ -1,4 +1,5 @@
-import { ValidationPipe } from '@nestjs/common';
+import { Inject, ValidationPipe } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app.module';
@@ -7,6 +8,9 @@ import { ApiKeyGuard } from './common/guards/api-key.guard';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const configService = app.get<ConfigService>(ConfigService);
+
+  console.log('main.ts', configService.get('API_KEY'));
 
   // app settings
   // app.useGlobalPipes(
@@ -20,7 +24,6 @@ async function bootstrap() {
   //   }),
   // );
   app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalGuards(new ApiKeyGuard());
 
   // documentation
   const config = new DocumentBuilder()
