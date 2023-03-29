@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { APP_GUARD, APP_PIPE } from '@nestjs/core';
+import { APP_GUARD } from '@nestjs/core';
+import { CoffeesController } from 'src/coffees/coffees.controller';
 import { ApiKeyGuard } from './guards/api-key.guard';
-import { ParseIntPipe } from './pipes/parse-int.pipe';
+import { LoggingMiddleware } from './middleware/logging.middleware';
 
 @Module({
   imports: [ConfigModule],
@@ -11,4 +12,13 @@ import { ParseIntPipe } from './pipes/parse-int.pipe';
     // { provide: APP_PIPE, useClass: ParseIntPipe },
   ],
 })
-export class CommonModule {}
+export class CommonModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    // consumer.apply(LoggingMiddleware).forRoutes('*'); // +
+    // consumer.apply(LoggingMiddleware).forRoutes('coffees'); // +
+    consumer.apply(LoggingMiddleware).forRoutes(CoffeesController); // +
+    // consumer
+    //   .apply(LoggingMiddleware)
+    //   .forRoutes({ path: '*/coffees/*', method: RequestMethod.GET }); // -
+  }
+}
