@@ -16,6 +16,7 @@ import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
+import { Protocol } from 'src/common/decorators/protocol.decorator';
 
 const valid = new ValidationPipe({
   whitelist: true,
@@ -35,9 +36,14 @@ export class CoffeesController {
   //@SetMetadata('isPublic', true)
   @MakePublic()
   @Get()
-  async findAll(@Query() paginationQuery: PaginationQueryDto) {
+  async findAll(
+    @Protocol('https') protocol: string,
+    @Query() paginationQuery: PaginationQueryDto,
+  ) {
     // findAll(@Res() response)
-    await new Promise((resolve) => setTimeout(resolve, 5000));
+    console.log({ protocol });
+
+    // await new Promise((resolve) => setTimeout(resolve, 5000));
     return this.coffeeService.readAll(paginationQuery);
   }
 
