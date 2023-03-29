@@ -4,17 +4,15 @@ import {
   Delete,
   Get,
   Param,
+  ParseIntPipe,
   Patch,
   Post,
   Query,
-  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { MakePublic } from 'src/common/decorators/public.decorator';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
-import { ParamDto } from 'src/common/dto/param.dto';
-import { ApiKeyGuard } from 'src/common/guards/api-key.guard';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -44,15 +42,7 @@ export class CoffeesController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: number) {
-    // TODO: id Protect from NAN
-    // const { id } = params;
-    console.log({
-      loc: `findOne(@Param('id') id: number)`,
-      value: id,
-      type: typeof id,
-    });
-
+  findOne(@Param('id', ParseIntPipe) id: number) {
     return this.coffeeService.readById(id);
   }
 
@@ -62,14 +52,15 @@ export class CoffeesController {
   }
 
   @Patch(':id')
-  update(@Param() params: ParamDto, @Body() updateCoffeeDto: UpdateCoffeeDto) {
-    const { id } = params;
+  update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateCoffeeDto: UpdateCoffeeDto,
+  ) {
     return this.coffeeService.update(id, updateCoffeeDto);
   }
 
   @Delete(':id')
-  remove(@Param() params: ParamDto) {
-    const { id } = params;
+  remove(@Param('id', ParseIntPipe) id: number) {
     return this.coffeeService.delete(id);
   }
 }
