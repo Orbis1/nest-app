@@ -27,7 +27,7 @@ async function bootstrap() {
     new TimeoutInterceptor(),
   );
 
-  // documentation d
+  // documentation
   const config = new DocumentBuilder()
     .setTitle('Coffees example')
     .setDescription('The coffee API description')

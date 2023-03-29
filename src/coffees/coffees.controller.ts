@@ -17,6 +17,7 @@ import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Protocol } from 'src/common/decorators/protocol.decorator';
+import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
 
 const valid = new ValidationPipe({
   whitelist: true,
@@ -27,12 +28,16 @@ const valid = new ValidationPipe({
   },
 });
 
+@ApiTags('coffees')
 @UsePipes(valid)
 @Controller('coffees')
 export class CoffeesController {
   constructor(private readonly coffeeService: CoffeesService) {}
 
   // @UsePipes(ValidationPipe)
+
+  //@ApiResponse({ status: 403, description: 'Forbidden' })
+  @ApiForbiddenResponse({ description: 'Forbidden' })
   //@SetMetadata('isPublic', true)
   @MakePublic()
   @Get()
