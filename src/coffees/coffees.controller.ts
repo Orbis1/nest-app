@@ -7,12 +7,14 @@ import {
   Patch,
   Post,
   Query,
+  UseGuards,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { MakePublic } from 'src/common/decorators/public.decorator';
 import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
 import { ParamDto } from 'src/common/dto/param.dto';
+import { ApiKeyGuard } from 'src/common/guards/api-key.guard';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
@@ -42,8 +44,13 @@ export class CoffeesController {
 
   @Get(':id')
   findOne(@Param('id') id: number) {
+    // TODO: id Protect from NAN
     // const { id } = params;
-    console.log({ value: id, type: typeof id });
+    console.log({
+      loc: `findOne(@Param('id') id: number)`,
+      value: id,
+      type: typeof id,
+    });
 
     return this.coffeeService.readById(id);
   }

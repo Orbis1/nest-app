@@ -7,21 +7,21 @@ import { PostgresDataSource } from './app.datasource';
 import { CoffeeRatingModule } from './coffee-rating/coffee-rating.module';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
-import { ApiKeyGuard } from './common/guards/api-key.guard';
 import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      validationSchema: Joi.object({
-        DATABASE_HOST: Joi.required(),
-        DATABASE_PORT: Joi.number().default(5432),
-      }),
-    }),
+    // ConfigModule.forRoot({
+    //   validationSchema: Joi.object({
+    //     DATABASE_HOST: Joi.required(),
+    //     DATABASE_PORT: Joi.number().default(5432),
+    //   }),
+    // }),
+    ConfigModule.forRoot(),
     TypeOrmModule.forRoot(PostgresDataSource.options),
-    CommonModule,
     CoffeesModule,
     CoffeeRatingModule,
+    CommonModule,
   ],
   controllers: [AppController],
   providers: [AppService],

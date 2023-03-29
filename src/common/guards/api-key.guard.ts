@@ -22,9 +22,6 @@ export class ApiKeyGuard implements CanActivate {
     const authHeader = req.header('Authorization');
     const apiKey = this.configService.get('API_KEY');
 
-    console.log('Authorization', authHeader);
-    console.log('API_KEY', apiKey);
-
     return authHeader === apiKey;
   }
 }
