@@ -1,7 +1,7 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
-import { CoffeesController } from 'src/coffees/coffees.controller';
+import { CoffeesController } from '../coffees/coffees.controller';
 import { ApiKeyGuard } from './guards/api-key.guard';
 import { LoggingMiddleware } from './middleware/logging.middleware';
 

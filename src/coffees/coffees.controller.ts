@@ -11,13 +11,13 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { MakePublic } from 'src/common/decorators/public.decorator';
-import { PaginationQueryDto } from 'src/common/dto/pagination-query.dto';
+import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { MakePublic } from '../common/decorators/public.decorator';
+import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 import { CoffeesService } from './coffees.service';
 import { CreateCoffeeDto } from './dto/create-coffee.dto';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
-import { Protocol } from 'src/common/decorators/protocol.decorator';
-import { ApiForbiddenResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Protocol } from '../common/decorators/protocol.decorator';
 
 const valid = new ValidationPipe({
   whitelist: true,
