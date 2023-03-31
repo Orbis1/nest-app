@@ -1,6 +1,11 @@
 {
   "moduleFileExtensions": ["js", "json", "ts"],
   "rootDir": ".",
+  "displayName": {
+    "name": "e2e",
+    "color": "yellow"
+  },
+  "verbose": true,
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
