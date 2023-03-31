@@ -41,11 +41,11 @@ export class CoffeesController {
   @MakePublic()
   @Get()
   async findAll(
-    @Protocol('https') protocol: string,
+    // @Protocol('https') protocol: string,
     @Query() paginationQuery: PaginationQueryDto,
   ) {
     // findAll(@Res() response)
-    console.log({ protocol });
+    // console.log({ protocol });
 
     // await new Promise((resolve) => setTimeout(resolve, 5000));
     return this.coffeeService.readAll(paginationQuery);
