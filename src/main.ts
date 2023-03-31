@@ -21,11 +21,11 @@ async function bootstrap() {
   //     },
   //   }),
   // );
-  app.useGlobalFilters(new HttpExceptionFilter());
-  app.useGlobalInterceptors(
-    new WrapResponseInterceptor(),
-    new TimeoutInterceptor(),
-  );
+  // app.useGlobalFilters(new HttpExceptionFilter());
+  // app.useGlobalInterceptors(
+  //   new WrapResponseInterceptor(),
+  //   new TimeoutInterceptor(),
+  // );
 
   // documentation
   const config = new DocumentBuilder()

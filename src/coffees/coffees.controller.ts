@@ -34,8 +34,7 @@ const valid = new ValidationPipe({
 export class CoffeesController {
   constructor(private readonly coffeeService: CoffeesService) {}
 
-  // @UsePipes(ValidationPipe)
-
+  //@UsePipes(ValidationPipe)
   //@ApiResponse({ status: 403, description: 'Forbidden' })
   @ApiForbiddenResponse({ description: 'Forbidden' })
   //@SetMetadata('isPublic', true)

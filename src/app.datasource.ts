@@ -10,5 +10,3 @@ export const PostgresDataSource = new DataSource({
   entities: ['dist/**/entities/*.js'],
   migrations: ['dist/migrations/*.js'],
 });
-
-console.log('./app.datasource.ts', process.env.DATABASE_USER);
