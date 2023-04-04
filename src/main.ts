@@ -6,9 +6,11 @@ import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { WrapResponseInterceptor } from './common/interceptors/wrap-response.interceptor';
+import { logger } from './logger';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger });
+  // app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
   // app settings
   // app.useGlobalPipes(
@@ -21,21 +23,21 @@ async function bootstrap() {
   //     },
   //   }),
   // );
-  // app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter());
   // app.useGlobalInterceptors(
   //   new WrapResponseInterceptor(),
   //   new TimeoutInterceptor(),
   // );
 
   // documentation
-  const config = new DocumentBuilder()
-    .setTitle('Coffees example')
-    .setDescription('The coffee API description')
-    .setVersion('1.0')
-    .addTag('coffee')
-    .build();
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  // const config = new DocumentBuilder()
+  //   .setTitle('Coffees example')
+  //   .setDescription('The coffee API description')
+  //   .setVersion('1.0')
+  //   .addTag('coffee')
+  //   .build();
+  // const document = SwaggerModule.createDocument(app, config);
+  // SwaggerModule.setup('api', app, document);
 
   await app.listen(3000);
 }

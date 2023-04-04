@@ -71,3 +71,23 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+## .env
+
+```
+# Apllication
+APP_NAME=MyNestApp
+
+# Logging
+KEEP_LOGS_FOR=3d
+
+# Database
+DATABASE_USER=postrgers
+DATABASE_PASS=pass123
+DATABASE_NAME=postrgers
+DATABASE_PORT=5432
+DATABASE_HOST=localhost
+
+# Security
+API_KEY=qwerty
+```

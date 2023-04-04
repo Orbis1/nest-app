@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Logger, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateCoffeeDto } from './dto/update-coffee.dto';
 import { Coffee } from './entities/coffee.entity';
@@ -9,6 +9,8 @@ import { PaginationQueryDto } from '../common/dto/pagination-query.dto';
 
 @Injectable()
 export class CoffeesService {
+  private readonly logger = new Logger(CoffeesService.name);
+
   constructor(
     @InjectRepository(Coffee)
     private readonly coffeeRepository: Repository<Coffee>,
@@ -31,6 +33,7 @@ export class CoffeesService {
   }
 
   async readById(id: number) {
+    this.logger.log(`readById: ${id}`);
     const coffee = await this.coffeeRepository.findOne({
       where: { id: id },
       relations: { flavors: true },
