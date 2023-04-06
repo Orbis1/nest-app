@@ -7,6 +7,7 @@ import { PostgresDataSource } from './app.datasource';
 import { ConfigModule } from '@nestjs/config';
 // import * as Joi from 'joi';
 import { CommonModule } from './common/common.module';
+import { AutoExModule } from './auto-ex/auto-ex.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { CommonModule } from './common/common.module';
     TypeOrmModule.forRoot(PostgresDataSource.options),
     CoffeesModule,
     CommonModule,
+    AutoExModule,
   ],
   controllers: [AppController],
   providers: [Logger, AppService],
