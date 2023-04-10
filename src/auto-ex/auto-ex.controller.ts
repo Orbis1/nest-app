@@ -4,12 +4,13 @@ import {
   HttpCode,
   HttpStatus,
   Post,
+  UseFilters,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
 import { AutoExService } from './auto-ex.service';
 import { PostDto } from './dto/post.dto';
-import { AutoExResponse } from './dto/response.dto';
+import { AutoExHttpExceptionFilter } from './filters/http-exception.filter';
 
 @UsePipes(
   new ValidationPipe({
@@ -20,6 +21,7 @@ import { AutoExResponse } from './dto/response.dto';
     },
   }),
 )
+@UseFilters(new AutoExHttpExceptionFilter())
 @Controller('auto-ex')
 export class AutoExController {
   constructor(private readonly autoExService: AutoExService) {}

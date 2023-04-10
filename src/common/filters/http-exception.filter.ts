@@ -22,7 +22,7 @@ export class HttpExceptionFilter<T extends HttpException>
     const exceptionResponse = exception.getResponse();
 
     const error =
-      typeof response === 'string'
+      typeof exceptionResponse === 'string'
         ? { message: exceptionResponse }
         : (exceptionResponse as object);
 
@@ -32,6 +32,6 @@ export class HttpExceptionFilter<T extends HttpException>
       )} - ${JSON.stringify(error)}`,
     );
 
-    response.status(status).json({ ...error });
+    response.status(status).json(error);
   }
 }
