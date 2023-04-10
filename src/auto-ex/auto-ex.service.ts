@@ -20,7 +20,22 @@ export class AutoExService {
     private readonly userRepository: Repository<UsersAttrPLUS>,
   ) {}
 
-  create(createRoleDto: iCreateRole) {
+  async create(createRoleDto: iCreateRole) {
+    const { employeenumber, sudirroles, project, projectroles } = createRoleDto;
+    const existingRecord = await this.userRepository.findOne({
+      where: {
+        employeenumber,
+        sudirroles,
+        project,
+        projectroles,
+      },
+    });
+
+    if (existingRecord)
+      throw new HttpException(
+        `record { employeenumber: ${employeenumber} } already exists`,
+        HttpStatus.FOUND,
+      );
     const role = this.userRepository.create(createRoleDto);
     return this.userRepository.save(role);
   }
@@ -50,20 +65,17 @@ export class AutoExService {
   }
 }
 
-function isCreateRoleDto(data: PostDto): boolean {
+function isCreateRoleDto(postDto: PostDto): boolean {
   return (
-    data &&
-    'accessAction' in data &&
-    data.accessAction === 'open' &&
-    'selectValues' in data
+    postDto &&
+    'accessAction' in postDto &&
+    postDto.accessAction === 'open' &&
+    'selectValues' in postDto
   );
 }
 
-function isDeleteRoleDto(data: PostDto): boolean {
+function isDeleteRoleDto(postDto: PostDto): boolean {
   return (
-    data &&
-    'accessAction' in data &&
-    data.accessAction === 'close' &&
-    !('selectValues' in data)
+    postDto && 'accessAction' in postDto && postDto.accessAction === 'close'
   );
 }

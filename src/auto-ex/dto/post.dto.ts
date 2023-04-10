@@ -31,50 +31,14 @@ export class PostDto {
   readonly userTabNumber: string;
 
   @ApiProperty({
-    description:
-      'Список логинов пользователя для которых предоставляется доступ, может быть пустым массивом',
-  })
-  @IsString({ each: true })
-  readonly domainLogins: string[];
-
-  @ApiProperty({
-    description:
-      'Список логинов пользователя для которых предоставляется доступ, может быть пустым массивом',
-  })
-  @IsString({ each: true })
-  readonly sigmaLogins: string[];
-
-  @ApiProperty({
-    description: 'Запросили доступ для УЗ спецназначения ture|false',
+    description: 'Запросили доступ для УЗ спецназначения true|false',
   })
   @IsBoolean()
   readonly isTech: boolean;
 
-  // @ApiProperty({
-  //   description:
-  //     'Логины веденные пользователем в ручную, если пользователь ни чего не вводил, то пусто',
-  // })
-  // @IsString({ each: true })
-  // readonly manualLogins: string[];
-
   @ApiProperty({ description: 'Номер заявки в SD' })
   @IsString()
   readonly sdNumber: string;
-
-  @ApiProperty({
-    description:
-      'Список логинов СУДИР пользователей для которых предоставляется доступ, может быть пустым массивом',
-  })
-  @IsString({ each: true })
-  readonly sudirLogins: string[];
-
-  @ApiProperty({ description: 'Внутренняя почта' })
-  @IsString()
-  readonly internalEmail: string;
-
-  @ApiProperty({ description: 'Внешняя почта' })
-  @IsString()
-  readonly externalEmail: string; //
 
   @ApiProperty({ description: 'Данные из шаблона как есть' })
   @IsObject()

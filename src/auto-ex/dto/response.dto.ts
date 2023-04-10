@@ -1,8 +1,8 @@
 interface AutoExResponseSuccess {
   status: 'success';
-  login?: 'test';
-  password?: 'password';
-  message: 'Текст сообщения';
+  login?: string;
+  password?: string;
+  message: string;
   metaData?: {
     [prop: string]: string;
   };
@@ -10,11 +10,11 @@ interface AutoExResponseSuccess {
 
 interface AutoExResponseError {
   status: 'error';
-  login?: 'test';
-  password?: 'password';
-  message: 'Текст сообщения';
+  login?: string;
+  password?: string;
+  message: string;
   metaData: {
-    errorMessage: '';
+    errorMessage: string;
     [prop: string]: string;
   };
 }
