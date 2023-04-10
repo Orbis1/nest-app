@@ -6,7 +6,8 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "build": "nest build",
+    "prebuild": "ramraf dist & nest build",
+    "build": "PKG_CACHE_PATH=./pkg-cahe node ./build.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",
@@ -32,7 +33,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "joi": "^17.9.1",
-    "moment-timezone": "^0.5.43",
+    "moment-timezone": "0.5.42",
     "nest-winston": "^1.9.1",
     "pg": "^8.10.0",
     "reflect-metadata": "^0.1.13",

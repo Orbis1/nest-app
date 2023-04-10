@@ -6,11 +6,14 @@ export class UsersAttrPLUS {
   id: number;
 
   @Column()
-  EmployeeNumber: string;
+  employeenumber: string;
 
   @Column()
-  type: string;
+  sudirroles: string;
 
   @Column()
-  value: string;
+  project: string;
+
+  @Column()
+  projectroles: string;
 }

@@ -1,3 +1,27 @@
+interface AutoExResponseSuccess {
+  status: 'success';
+  login?: 'test';
+  password?: 'password';
+  message: 'Текст сообщения';
+  metaData?: {
+    [prop: string]: string;
+  };
+}
+
+interface AutoExResponseError {
+  status: 'error';
+  login?: 'test';
+  password?: 'password';
+  message: 'Текст сообщения';
+  metaData: {
+    errorMessage: '';
+    [prop: string]: string;
+  };
+}
+
+export type AutoExResponse = AutoExResponseSuccess | AutoExResponseError;
+
+/*
 {
  ⁣ ⁣ ⁣ ⁣"status": "success|error", //статус выполнения запроса
  ⁣ ⁣ ⁣ ⁣"login": "test", // Необязательное поле, в котором система может вернуть нам информацию о логине заведенного пользователя
@@ -8,3 +32,5 @@
  ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣//Люба другая информация которая система хочет сохранить в технических данных связанных с заявкой
  ⁣ ⁣ ⁣ ⁣} //Не обязательное свойство
 }
+
+*/

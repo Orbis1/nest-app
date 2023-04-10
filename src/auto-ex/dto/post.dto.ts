@@ -1,7 +1,7 @@
-import { IsBoolean, IsObject, IsString } from 'class-validator';
+import { IsBoolean, IsObject, IsOptional, IsString } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class CreateRoleDto {
+export class PostDto {
   @ApiProperty({ description: 'Название КЭ' })
   @IsString()
   readonly ceName: string;
@@ -15,7 +15,7 @@ export class CreateRoleDto {
       'Действие над доступом open - предоставить доступ, close - закрыть доступ',
   })
   @IsString()
-  readonly accessAction: 'open';
+  readonly accessAction: 'open' | 'close';
 
   @ApiProperty({
     description: 'Фио пользователя, для которого предоставляется доступ',
@@ -50,12 +50,12 @@ export class CreateRoleDto {
   @IsBoolean()
   readonly isTech: boolean;
 
-  @ApiProperty({
-    description:
-      'Логины веденные пользователем в ручную, если пользователь ни чего не вводил, то пусто',
-  })
-  @IsString({ each: true })
-  readonly manualLogins: string[];
+  // @ApiProperty({
+  //   description:
+  //     'Логины веденные пользователем в ручную, если пользователь ни чего не вводил, то пусто',
+  // })
+  // @IsString({ each: true })
+  // readonly manualLogins: string[];
 
   @ApiProperty({ description: 'Номер заявки в SD' })
   @IsString()
@@ -85,8 +85,21 @@ export class CreateRoleDto {
       'Выбранные пользователям значения из справочников SM при оформление заявки, при закрытие доступа selectValues отсутствует, так как необходимо закрыть доступ полностью без каких-либо параметров',
   })
   @IsObject()
+  @IsOptional()
   readonly selectValues: object;
 }
+
+export interface iCreateRole {
+  employeenumber: string;
+  sudirroles: string;
+  project: string;
+  projectroles: string;
+}
+
+export interface iDeleteRole {
+  employeenumber: string;
+}
+
 /*
 ⁣ ⁣ ⁣ ⁣"selectValues": {
  ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣"AUTP00006748": {

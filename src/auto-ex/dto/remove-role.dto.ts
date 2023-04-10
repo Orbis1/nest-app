@@ -1,8 +1,8 @@
 import { ApiProperty, OmitType } from '@nestjs/swagger';
-import { CreateRoleDto } from './create-role.dto';
+import { PostDto } from './post.dto';
 import { IsString } from 'class-validator';
 
-export class RemoveRoleDto extends OmitType(CreateRoleDto, [
+export class RemoveRoleDto extends OmitType(PostDto, [
   'selectValues',
   'accessAction',
 ] as const) {
