@@ -50,7 +50,7 @@ export class PostDto {
   })
   @IsObject()
   @IsOptional()
-  readonly selectValues: object;
+  readonly selectValues: iSelectValues | Record<string, never>;
 }
 
 export interface iCreateRole {
@@ -64,21 +64,28 @@ export interface iDeleteRole {
   employeenumber: string;
 }
 
-/*
-⁣ ⁣ ⁣ ⁣"selectValues": {
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣"AUTP00006748": {
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣"key": "ROLE-3", //может быть null если не указан "Внешний идентификатор" у параметра доступа шаблона
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣"values": {
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣"AUTH00106943": "Андеррайтер ЭРМБ"
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣}
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣},
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣"AUTP00009748": {
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣"key": "domain",
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣"values": {
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣"AUTH00058486": "SIGMA"
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣"AUTH00058487": "ALPHA"
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣}
- ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣}
- ⁣ ⁣ ⁣ ⁣} //Выбранные пользователям значения из справочников SM при оформление заявки, при закрытие доступа selectValues отсутствует, так как необходимо закрыть доступ полностью без каких-либо параметров
+export interface iSelectValues {
+  [parentKey: string]: {
+    key?: string | null;
+    values: {
+      [childKey: string]: string;
+    };
+  };
+}
 
-*/
+const sample: iSelectValues = {
+  AUTP00006748: {
+    key: 'ROLE-3', //может быть null если не указан "Внешний идентификатор" у параметра доступа шаблона
+    values: {
+      AUTH00106943: 'Андеррайтер ЭРМБ',
+    },
+  },
+  AUTP00009748: {
+    key: 'domain',
+    values: {
+      AUTH00058486: 'SIGMA',
+      AUTH00058487: 'ALPHA',
+    },
+  },
+};
+//Выбранные пользователям значения из справочников SM при оформление заявки, при закрытие доступа selectValues отсутствует, так как необходимо закрыть доступ полностью без каких-либо параметров
