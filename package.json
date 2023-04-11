@@ -1,13 +1,13 @@
 {
-  "name": "nest-app",
+  "name": "auto-ex",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
-    "prebuild": "ramraf dist & nest build",
-    "build": "PKG_CACHE_PATH=./pkg-cahe node ./build.js",
+    "prebuild": "rimraf dist & nest build",
+    "build": "PKG_CACHE_PATH=./pkg-cache node ./build.js",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "nest start --watch",

@@ -32,5 +32,4 @@ export type AutoExResponse = AutoExResponseSuccess | AutoExResponseError;
  ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣ ⁣//Люба другая информация которая система хочет сохранить в технических данных связанных с заявкой
  ⁣ ⁣ ⁣ ⁣} //Не обязательное свойство
 }
-
 */
