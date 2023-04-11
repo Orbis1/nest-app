@@ -1,6 +1,5 @@
 import {
   BadRequestException,
-  HttpCode,
   HttpException,
   HttpStatus,
   Injectable,
@@ -21,8 +20,6 @@ export class AutoExService {
   ) {}
 
   async create(createRoleDto: iCreateRole[]) {
-    // let roles: UsersAttrPLUS[] = [];
-
     for (const dto of createRoleDto) {
       const { employeenumber, sudirroles, project, projectroles } = dto;
 
