@@ -1,0 +1,4 @@
+{
+  "scripts": "./dist/*.js",
+  "targets": ["node18-win-x64"]
+}
