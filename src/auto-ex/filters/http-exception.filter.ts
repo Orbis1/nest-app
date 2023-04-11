@@ -8,10 +8,10 @@ import {
 import { Request, Response } from 'express';
 
 @Catch(HttpException)
-export class HttpExceptionFilter<T extends HttpException>
+export class AutoExHttpExceptionFilter<T extends HttpException>
   implements ExceptionFilter
 {
-  private readonly logger = new Logger(HttpExceptionFilter.name);
+  private readonly logger = new Logger(AutoExHttpExceptionFilter.name);
 
   catch(exception: T, host: ArgumentsHost) {
     const context = host.switchToHttp();
@@ -26,12 +26,17 @@ export class HttpExceptionFilter<T extends HttpException>
         ? { message: exceptionResponse }
         : (exceptionResponse as object);
 
+    // rename message -> errorMessage
+    delete Object.assign(error, { ['errorMessage']: error['message'] })[
+      'message'
+    ];
+
     this.logger.error(
       `${req.statusCode} ${req.path} ${req.ip} ${JSON.stringify(
         req.body,
       )} - ${JSON.stringify(error)}`,
     );
 
-    response.status(status).json(error);
+    response.status(status).json({ status: 'error', metaData: { ...error } });
   }
 }

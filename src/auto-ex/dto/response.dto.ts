@@ -1,3 +1,26 @@
+interface AutoExResponseSuccess {
+  status: 'success';
+  login?: string;
+  password?: string;
+  message: string;
+  metaData?: {
+    [prop: string]: string;
+  };
+}
+
+interface AutoExResponseError {
+  status: 'error';
+  login?: string;
+  password?: string;
+  message: string;
+  metaData: {
+    errorMessage: string;
+    [prop: string]: string;
+  };
+}
+
+export type AutoExResponse = AutoExResponseSuccess | AutoExResponseError;
+
 /*
 {
  ⁣ ⁣ ⁣ ⁣"status": "success|error", //статус выполнения запроса

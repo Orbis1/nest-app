@@ -18,7 +18,7 @@ import { AutoExModule } from './auto-ex/auto-ex.module';
     //   }),
     // }),
     ConfigModule.forRoot(),
-    TypeOrmModule.forRoot(PostgresDataSource.options),
+    TypeOrmModule.forRoot({ ...PostgresDataSource.options, synchronize: true }),
     CoffeesModule,
     CommonModule,
     AutoExModule,
