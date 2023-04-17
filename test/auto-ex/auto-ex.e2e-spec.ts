@@ -139,5 +139,19 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
     });
   });
 
+  describe('Wrong body [POST /]', () => {
+    it('should return 400', async () => {
+      const { body } = await request(app.getHttpServer())
+        .post('/auto-ex')
+        .send({ hello: 'world' })
+        .expect(400);
+
+      expect(body.status).toEqual('error');
+      expect(body).toHaveProperty('metaData');
+      expect(body.metaData).toHaveProperty('errorMessage');
+      expect(body.metaData.errorMessage.length).not.toBeLessThan(2);
+    });
+  });
+
   afterAll(async () => await app.close()); // close db connection
 });
