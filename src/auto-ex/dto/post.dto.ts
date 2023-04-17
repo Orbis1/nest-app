@@ -42,7 +42,9 @@ export class PostDto {
 
   @ApiProperty({ description: 'Данные из шаблона как есть' })
   @IsObject()
-  readonly templateValues: object; //,
+  readonly templateValues: {
+    additionalRequest?: 'New' | 'Additional';
+  };
 
   @ApiProperty({
     description:

@@ -63,14 +63,21 @@ export class AutoExService {
     return this.userRepository.delete({ employeenumber });
   }
 
-  defineAction(postDto: PostDto) {
+  async defineAction(postDto: PostDto) {
     if (isCreateRoleDto(postDto)) {
+      const { additionalRequest } = postDto.templateValues;
       const values = parsePostSelectedValues(postDto.selectValues);
 
       const rows = transformSelectedValues(values).map((data) => ({
         ...data,
         employeenumber: postDto.userTabNumber,
       }));
+
+      if (additionalRequest === 'New') {
+        await this.delete({
+          employeenumber: postDto.userTabNumber,
+        });
+      }
 
       return this.create(rows);
     } else if (isDeleteRoleDto(postDto)) {
@@ -90,7 +97,19 @@ function isCreateRoleDto(postDto: PostDto): boolean {
     postDto &&
     'accessAction' in postDto &&
     postDto.accessAction === 'open' &&
-    'selectValues' in postDto
+    'selectValues' in postDto &&
+    'templateValues' in postDto
+  );
+}
+
+function isAddRoleDto(postDto: PostDto): boolean {
+  return (
+    postDto &&
+    'accessAction' in postDto &&
+    postDto.accessAction === 'open' &&
+    'selectValues' in postDto &&
+    'templateValues' in postDto &&
+    postDto.templateValues.additionalRequest === 'Additional'
   );
 }
 

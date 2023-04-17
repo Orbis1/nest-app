@@ -1,56 +1,26 @@
-import { HttpStatus, INestApplication } from '@nestjs/common';
+import { INestApplication } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { TypeOrmModule } from '@nestjs/typeorm/dist/typeorm.module';
 import * as request from 'supertest';
 import { PostgresDataSource } from '../../src/app.datasource';
 import { AutoExModule } from '../../src/auto-ex/auto-ex.module';
 import { PostDto } from '../../src/auto-ex/dto/post.dto';
+import { sampleDeleteRole } from './sampleDeleteRole.dto';
+import { sampleAddRole } from './sapmleAddRole.dto';
 
 describe('[Feature] Auto-execution - /auto-ex', () => {
   let app: INestApplication;
 
-  const sampleAddRole: PostDto = {
-    templateValues: {},
-    isTech: false,
-    fio: 'Иванов Иван Иванович',
-    ce: 'ID1',
-    ceName: 'Our System Name',
-    sdNumber: 'ID2',
-    accessAction: 'open',
-    userTabNumber: '0001',
-    selectValues: {
-      AUTP00000921: {
-        key: 'sudirRole',
-        values: {
-          AUTH00059019: 'VPO-KIB-QS-PU',
-        },
-      },
-      AUTP00000922: {
-        key: 'project',
-        values: {
-          AUTH00059020: 'CKR',
-        },
-      },
-      AUTP00000923: {
-        key: 'projectRole',
-        values: {
-          AUTH00059021: 'Manager',
-          AUTH00059022: 'User',
-        },
-      },
-    },
-  };
-
-  const sampleDeleteRole: PostDto = {
-    templateValues: {},
-    isTech: false,
-    fio: 'Иванов Иван Иванович',
-    ce: 'ID1',
-    ceName: 'Our System Name',
-    sdNumber: 'ID2',
-    accessAction: 'close',
-    userTabNumber: '0001',
-    selectValues: {},
+  const responseValidation = (body, type: 'succees' | 'error') => {
+    if (type === 'succees') {
+      expect(body.status).toEqual('success');
+      expect(body).toHaveProperty('metaData');
+    } else {
+      expect(body.status).toEqual('error');
+      expect(body).toHaveProperty('metaData');
+      expect(body.metaData).toHaveProperty('errorMessage');
+      expect(body.metaData.errorMessage.length).not.toBeLessThan(2);
+    }
   };
 
   const ormTestOptions = {
@@ -77,11 +47,10 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
       it('should return 200', async () => {
         const { body } = await request(app.getHttpServer())
           .post('/auto-ex')
-          .send(sampleAddRole)
+          .send(sampleAddRole as PostDto)
           .expect(200);
 
-        expect(body.status).toEqual('success');
-        expect(body).toHaveProperty('metaData');
+        responseValidation(body, 'succees');
       });
     });
 
@@ -89,13 +58,26 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
       it('should return 409', async () => {
         const { body } = await request(app.getHttpServer())
           .post('/auto-ex')
-          .send(sampleAddRole)
+          .send(sampleAddRole as PostDto)
           .expect(409);
 
-        expect(body.status).toEqual('error');
-        expect(body).toHaveProperty('metaData');
-        expect(body.metaData).toHaveProperty('errorMessage');
-        expect(body.metaData.errorMessage.length).not.toBeLessThan(2);
+        responseValidation(body, 'error');
+      });
+    });
+
+    describe(`if the user already has this role(s), but additionalRequest = 'New'`, () => {
+      it('should return 200', async () => {
+        const { body } = await request(app.getHttpServer())
+          .post('/auto-ex')
+          .send({
+            ...sampleAddRole,
+            templateValues: {
+              additionalRequest: 'New',
+            },
+          } as PostDto)
+          .expect(200);
+
+        responseValidation(body, 'succees');
       });
     });
 
@@ -113,13 +95,10 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
                 },
               },
             },
-          })
+          } as PostDto)
           .expect(400);
 
-        expect(body.status).toEqual('error');
-        expect(body).toHaveProperty('metaData');
-        expect(body.metaData).toHaveProperty('errorMessage');
-        expect(body.metaData.errorMessage.length).not.toBeLessThan(2);
+        responseValidation(body, 'error');
       });
     });
   });
@@ -129,11 +108,10 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
       it('should return 200', async () => {
         const { body } = await request(app.getHttpServer())
           .post('/auto-ex')
-          .send(sampleDeleteRole)
+          .send(sampleDeleteRole as PostDto)
           .expect(200);
 
-        expect(body.status).toEqual('success');
-        expect(body).toHaveProperty('metaData');
+        responseValidation(body, 'succees');
         expect(body.metaData).toHaveProperty('affected');
       });
     });
@@ -146,10 +124,7 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
         .send({ hello: 'world' })
         .expect(400);
 
-      expect(body.status).toEqual('error');
-      expect(body).toHaveProperty('metaData');
-      expect(body.metaData).toHaveProperty('errorMessage');
-      expect(body.metaData.errorMessage.length).not.toBeLessThan(2);
+      responseValidation(body, 'error');
     });
   });
 
