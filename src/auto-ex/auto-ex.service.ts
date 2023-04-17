@@ -30,7 +30,7 @@ export class AutoExService {
             `sudirroles: ${sudirroles}, ` +
             `project: ${project}, ` +
             `projectroles: ${projectroles}` +
-            ` } is not full`,
+            ` } is incomplete`,
           HttpStatus.BAD_REQUEST,
         );
       }
@@ -45,13 +45,13 @@ export class AutoExService {
 
       if (existingRecord)
         throw new HttpException(
-          `record { ` +
+          `the record { ` +
             `employeenumber: ${employeenumber}, ` +
             `sudirroles: ${sudirroles}, ` +
             `project: ${project}, ` +
             `projectroles: ${projectroles}` +
             ` } already exists`,
-          HttpStatus.FOUND,
+          HttpStatus.CONFLICT,
         );
     }
     const roles = this.userRepository.create(createRoleDto);
