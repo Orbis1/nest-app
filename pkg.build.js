@@ -1,4 +1,5 @@
 'use strict';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
 const { exec } = require('pkg');
 
 const build = async (enter, out) => {
