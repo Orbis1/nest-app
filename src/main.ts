@@ -7,9 +7,17 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { TimeoutInterceptor } from './common/interceptors/timeout.interceptor';
 import { WrapResponseInterceptor } from './common/interceptors/wrap-response.interceptor';
 import { logger } from './logger';
+import { readFileSync } from 'fs';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { logger });
+  const httpsOptions = {
+    // key: readFileSync('./secrets/private-key.pem'),
+    key: readFileSync('./cert/key.pem'),
+    // cert: readFileSync('./secrets/public-certificate.pem'),
+    cert: readFileSync('./cert/cert.pem'),
+  };
+
+  const app = await NestFactory.create(AppModule, { logger, httpsOptions });
   // app.useLogger(app.get(WINSTON_MODULE_NEST_PROVIDER));
 
   // app settings
