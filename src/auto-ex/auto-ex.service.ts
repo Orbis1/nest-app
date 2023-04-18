@@ -25,13 +25,22 @@ export class AutoExService {
 
       if (!(employeenumber && sudirroles && project && projectroles)) {
         throw new HttpException(
-          `record { ` +
-            `employeenumber: ${employeenumber}, ` +
-            `sudirroles: ${sudirroles}, ` +
-            `project: ${project}, ` +
-            `projectroles: ${projectroles}` +
-            ` } is incomplete`,
-          HttpStatus.BAD_REQUEST,
+          {
+            reason:
+              `В заявке недостаточно данных для присвоения роли. ` +
+              `Табельный номер: ${employeenumber ?? '?'}, ` +
+              `Роль СУДИР: ${sudirroles ?? '?'}, ` +
+              `Проект: ${project ?? '?'}, ` +
+              `Роль в проекте: ${projectroles ?? '?'}`,
+            errorMessage:
+              `record { ` +
+              `employeenumber: ${employeenumber}, ` +
+              `sudirroles: ${sudirroles}, ` +
+              `project: ${project}, ` +
+              `projectroles: ${projectroles}` +
+              ` } is incomplete`,
+          },
+          HttpStatus.METHOD_NOT_ALLOWED,
         );
       }
       const existingRecord = await this.userRepository.findOne({
@@ -45,13 +54,19 @@ export class AutoExService {
 
       if (existingRecord)
         throw new HttpException(
-          `the record { ` +
-            `employeenumber: ${employeenumber}, ` +
-            `sudirroles: ${sudirroles}, ` +
-            `project: ${project}, ` +
-            `projectroles: ${projectroles}` +
-            ` } already exists`,
-          HttpStatus.CONFLICT,
+          {
+            reason:
+              `У пользователя уже есть роль ` +
+              `${sudirroles} ${project} ${projectroles} `,
+            errorMessage:
+              `the record { ` +
+              `employeenumber: ${employeenumber}, ` +
+              `sudirroles: ${sudirroles}, ` +
+              `project: ${project}, ` +
+              `projectroles: ${projectroles}` +
+              ` } already exists`,
+          },
+          HttpStatus.FOUND,
         );
     }
     const roles = this.userRepository.create(createRoleDto);
@@ -85,8 +100,12 @@ export class AutoExService {
         employeenumber: postDto.userTabNumber,
       });
     } else {
-      throw new BadRequestException(
-        'isCreateRoleDto = false && isDeleteRoleDto = false',
+      throw new HttpException(
+        {
+          reason: `Не удалось определить тип запроса`,
+          errorMessage: 'isCreateRoleDto = false && isDeleteRoleDto = false',
+        },
+        HttpStatus.BAD_REQUEST,
       );
     }
   }

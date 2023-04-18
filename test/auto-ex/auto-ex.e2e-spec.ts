@@ -17,6 +17,8 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
       expect(body).toHaveProperty('metaData');
     } else {
       expect(body.status).toEqual('error');
+      expect(body).toHaveProperty('message');
+      expect(body.message.length).not.toBeLessThan(2);
       expect(body).toHaveProperty('metaData');
       expect(body.metaData).toHaveProperty('errorMessage');
       expect(body.metaData.errorMessage.length).not.toBeLessThan(2);
@@ -55,11 +57,11 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
     });
 
     describe(`if the user already has this role(s)`, () => {
-      it('should return 409', async () => {
+      it(`should return 200 - status: "error"`, async () => {
         const { body } = await request(app.getHttpServer())
           .post('/auto-ex')
           .send(sampleAddRole as PostDto)
-          .expect(409);
+          .expect(200);
 
         responseValidation(body, 'error');
       });
@@ -82,7 +84,7 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
     });
 
     describe(`if the data is incomplete`, () => {
-      it('should return 400', async () => {
+      it(`should return 200 - status: "error"`, async () => {
         const { body } = await request(app.getHttpServer())
           .post('/auto-ex')
           .send({
@@ -96,7 +98,7 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
               },
             },
           } as PostDto)
-          .expect(400);
+          .expect(200);
 
         responseValidation(body, 'error');
       });
@@ -118,11 +120,11 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
   });
 
   describe('Wrong body [POST /]', () => {
-    it('should return 400', async () => {
+    it(`should return 200 - status: "error"`, async () => {
       const { body } = await request(app.getHttpServer())
         .post('/auto-ex')
         .send({ hello: 'world' })
-        .expect(400);
+        .expect(200);
 
       responseValidation(body, 'error');
     });

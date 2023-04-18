@@ -7,6 +7,12 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
+interface iError {
+  errorMessage?: string;
+  reason: string;
+  error?: string;
+}
+
 @Catch(HttpException)
 export class AutoExHttpExceptionFilter<T extends HttpException>
   implements ExceptionFilter
@@ -23,13 +29,11 @@ export class AutoExHttpExceptionFilter<T extends HttpException>
 
     const error =
       typeof exceptionResponse === 'string'
-        ? { message: exceptionResponse }
-        : (exceptionResponse as object);
+        ? { reason: exceptionResponse }
+        : (exceptionResponse as iError);
 
-    // rename message -> errorMessage
-    delete Object.assign(error, { ['errorMessage']: error['message'] })[
-      'message'
-    ];
+    const { reason, error: systemError } = error;
+    delete error.reason;
 
     this.logger.error(
       `${req.statusCode} ${req.path} ${req.ip} ${JSON.stringify(
@@ -37,6 +41,13 @@ export class AutoExHttpExceptionFilter<T extends HttpException>
       )} - ${JSON.stringify(error)}`,
     );
 
-    response.status(status).json({ status: 'error', metaData: { ...error } });
+    response.status(200).json({
+      status: 'error',
+      message: reason ?? systemError,
+      metaData: {
+        ...error,
+        errorMessage: error.errorMessage ?? systemError,
+      },
+    });
   }
 }
