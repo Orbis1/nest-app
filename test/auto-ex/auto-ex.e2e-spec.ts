@@ -11,8 +11,8 @@ import { sampleAddRole } from './sapmleAddRole.dto';
 describe('[Feature] Auto-execution - /auto-ex', () => {
   let app: INestApplication;
 
-  const responseValidation = (body, type: 'succees' | 'error') => {
-    if (type === 'succees') {
+  const responseValidation = (body, type: 'success' | 'error') => {
+    if (type === 'success') {
       expect(body.status).toEqual('success');
       expect(body).toHaveProperty('metaData');
     } else {
@@ -50,7 +50,7 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
           .send(sampleAddRole as PostDto)
           .expect(200);
 
-        responseValidation(body, 'succees');
+        responseValidation(body, 'success');
       });
     });
 
@@ -77,7 +77,7 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
           } as PostDto)
           .expect(200);
 
-        responseValidation(body, 'succees');
+        responseValidation(body, 'success');
       });
     });
 
@@ -111,7 +111,7 @@ describe('[Feature] Auto-execution - /auto-ex', () => {
           .send(sampleDeleteRole as PostDto)
           .expect(200);
 
-        responseValidation(body, 'succees');
+        responseValidation(body, 'success');
         expect(body.metaData).toHaveProperty('affected');
       });
     });
