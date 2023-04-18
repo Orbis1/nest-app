@@ -1,10 +1,7 @@
-import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, PrimaryColumn } from 'typeorm';
 
-@Entity()
+@Entity({ name: 'sudiruserattr_plus' })
 export class UsersAttrPLUS {
-  // @PrimaryGeneratedColumn()
-  // id: number;
-
   @PrimaryColumn()
   employeenumber: string;
 
